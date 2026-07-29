@@ -1,0 +1,209 @@
+.statistics-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+
+  .title-block {
+    h1 {
+      margin: 0;
+      font-family: var(--font-pixel);
+      font-size: 16px;
+      color: #f7ca62;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: #caa460;
+    }
+  }
+}
+.savings-card {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.savings-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  .label { font-size: 12px; color: var(--earth); font-weight: 700; text-transform: uppercase; }
+  .value { font-size: 20px; font-weight: 800; color: var(--income); }
+  .value.negative { color: var(--expense); }
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  height: 160px;
+  padding-top: 10px;
+}
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 130px;
+  width: 100%;
+  justify-content: center;
+}
+.bar {
+  width: 12px;
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+}
+.bar.income { background: var(--income); }
+.bar.expense { background: var(--expense); }
+.bar-label { font-size: 11px; color: var(--earth); }
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--earth);
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .dot.income { background: var(--income); }
+  .dot.expense { background: var(--expense); }
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.category-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 50px;
+  align-items: center;
+  gap: 10px;
+}
+.cat-name { font-size: 13px; font-weight: 700; }
+.cat-bar-track {
+  height: 8px;
+  background: #eee7da;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.cat-bar-fill {
+  height: 100%;
+  background: var(--expense);
+}
+.cat-percent { font-size: 12px; color: var(--earth); text-align: right; }
+.loading { color: var(--earth); }
+
+.card-subtitle {
+  margin: 4px 0 14px;
+  font-size: 12px;
+  color: #caa460;
+}
+
+.date-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed #6b4320;
+  margin-bottom: 16px;
+
+  .filter-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #caa460;
+      white-space: nowrap;
+    }
+
+    select {
+      flex: 1;
+      width: 100%;
+      min-width: 0;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+}
+
+.period-total-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(239, 102, 81, 0.12);
+  border: 1px solid #7c3529;
+  margin-bottom: 14px;
+
+  .total-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #eeddbd;
+  }
+  .total-val {
+    font-family: var(--font-pixel);
+    font-size: 12px;
+    color: #ef6651;
+  }
+}
+
+.period-cat-row {
+  grid-template-columns: 160px 1fr 50px !important;
+
+  .cat-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .cat-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f7e6c5;
+    }
+    .cat-amount {
+      font-size: 11px;
+      color: #caa460;
+
+      &.income-amount {
+        color: #79ca4f !important;
+      }
+    }
+  }
+}
+
+.income-fill {
+  background: linear-gradient(90deg, #79ca4f, #4e862c) !important;
+}
+
+.income-total-box {
+  background: rgba(121, 201, 79, 0.12) !important;
+  border-color: #3b6b23 !important;
+
+  .income-val {
+    color: #79ca4f !important;
+  }
+}

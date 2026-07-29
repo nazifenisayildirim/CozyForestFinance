@@ -1,0 +1,109 @@
+.auth-page {
+  max-width: 400px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pixel-panel {
+  border: 3px solid #140d07;
+  outline: 2px solid #6b411d;
+  box-shadow: inset 0 0 0 2px #362112, 4px 4px 0 rgba(0, 0, 0, 0.55);
+  background: linear-gradient(180deg, #3b2517, #22150c);
+  border-radius: 2px;
+  padding: 20px;
+}
+
+.welcome-text {
+  font-size: 14px;
+  color: #caa460;
+  text-align: center;
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  h1 {
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    color: #f7ca62;
+    margin: 0 0 10px;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  label { font-size: 12px; font-weight: 700; color: #caa460; }
+  input {
+    background: #1a100b;
+    border: 2px solid #6b4320;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 13px;
+    width: 100%;
+  }
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    padding-right: 42px;
+  }
+
+  .toggle-password-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 6px;
+    opacity: 0.8;
+    user-select: none;
+    transition: transform 0.1s ease, opacity 0.1s ease;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
+}
+
+.pixel-btn-gold {
+  margin-top: 10px;
+  padding: 12px;
+  background: linear-gradient(180deg, #d49a37, #9e6c1e);
+  color: #1e1108;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  border: 2px solid #ffe180;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  width: 100%;
+  &:hover:not(:disabled) {
+    background: linear-gradient(180deg, #e8b04a, #b37e29);
+    transform: translateY(-1px);
+  }
+}
+
+.field-error {
+  font-size: 11px;
+  color: #ee6550;
+  margin: 2px 0 0;
+}
+
+.switch-link {
+  font-size: 13px;
+  color: #caa460;
+  margin-top: 10px;
+  text-align: center;
+  a { color: #f7ca62; font-weight: 700; text-decoration: underline; }
+}

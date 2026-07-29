@@ -1,0 +1,63 @@
+<section class="auth-page">
+  <form class="card auth-form pixel-panel" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Kayıt Ol</h1>
+
+    <div class="form-field">
+      <label>Ad Soyad</label>
+      <input type="text" formControlName="fullName" placeholder="Ad Soyad">
+      <p class="field-error" *ngIf="form.controls.fullName.touched && form.controls.fullName.invalid">
+        Ad soyad 2-80 karakter arasında olmalıdır.
+      </p>
+    </div>
+
+    <div class="form-field">
+      <label>E-posta</label>
+      <input type="email" formControlName="email" placeholder="ornek@eposta.com">
+      <p class="field-error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Geçerli bir e-posta adresi giriniz.
+      </p>
+    </div>
+
+    <div class="form-field">
+      <label>Şifre</label>
+      <div class="password-input-wrapper">
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••">
+        <button 
+          type="button" 
+          class="toggle-password-btn" 
+          (click)="toggleShowPassword()" 
+          [title]="showPassword ? 'Şifreyi Gizle' : 'Şifreyi Göster'">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+      <p class="field-error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+        Şifre en az 6 karakter olmalıdır.
+      </p>
+    </div>
+
+    <div class="form-field">
+      <label>Şifre (Tekrar)</label>
+      <div class="password-input-wrapper">
+        <input [type]="showPasswordConfirm ? 'text' : 'password'" formControlName="passwordConfirm" placeholder="••••••••">
+        <button 
+          type="button" 
+          class="toggle-password-btn" 
+          (click)="toggleShowPasswordConfirm()" 
+          [title]="showPasswordConfirm ? 'Şifreyi Gizle' : 'Şifreyi Göster'">
+          {{ showPasswordConfirm ? '🙈' : '👁️' }}
+        </button>
+      </div>
+      <p class="field-error" *ngIf="form.controls.passwordConfirm.touched && form.errors?.['passwordMismatch']">
+        Şifreler eşleşmiyor.
+      </p>
+    </div>
+
+    <p class="field-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="submit" class="pixel-btn-gold" [disabled]="submitting">
+      {{ submitting ? 'Kayıt oluşturuluyor…' : 'KAYIT OL 🌲' }}
+    </button>
+
+    <p class="switch-link">Zaten hesabın var mı? <a routerLink="/login">Giriş yap</a></p>
+  </form>
+</section>

@@ -1,0 +1,10 @@
+<div class="overlay" *ngIf="open">
+  <div class="dialog card">
+    <h3>{{ title }}</h3>
+    <p>{{ message }}</p>
+    <div class="actions">
+      <button class="btn btn-secondary" (click)="cancelled.emit()">Vazgeç</button>
+      <button class="btn btn-danger" (click)="confirmed.emit()">Sil</button>
+    </div>
+  </div>
+</div>

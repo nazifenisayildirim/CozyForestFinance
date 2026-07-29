@@ -1,0 +1,114 @@
+<section class="settings-page">
+  <div class="header-row">
+    <div class="title-block">
+      <h1>AYARLAR <span class="leaf-icon">🤖</span></h1>
+      <p class="subtitle">Profilini düzenle ve hesap güvenliğini yönet.</p>
+    </div>
+  </div>
+
+  <app-mascot-message character="robot" [mood]="robotMood" [message]="robotMessage"></app-mascot-message>
+
+  <div class="settings-grid">
+    <!-- Profil Düzenleme Card (Pre-filled!) -->
+    <div class="settings-card pixel-panel">
+      <div class="card-header">
+        <h2>👤 PROFİL DÜZENLE</h2>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="card-body">
+        <div class="form-field">
+          <label>Ad Soyad</label>
+          <input type="text" formControlName="fullName" placeholder="Ad Soyad">
+          <p class="field-error" *ngIf="profileForm.controls.fullName.touched && profileForm.controls.fullName.invalid">
+            Lütfen geçerli bir isim girin.
+          </p>
+        </div>
+
+        <div class="form-field">
+          <label>E-posta Adresi</label>
+          <input type="email" formControlName="email" placeholder="ornek@cozyforest.com">
+          <p class="field-error" *ngIf="profileForm.controls.email.touched && profileForm.controls.email.invalid">
+            Geçerli bir e-posta adresi girin.
+          </p>
+        </div>
+
+        <button type="submit" class="pixel-btn-gold">Profili Kaydet</button>
+      </form>
+    </div>
+
+    <!-- Şifre Değiştirme -->
+    <div class="settings-card pixel-panel">
+      <div class="card-header">
+        <h2>🔑 ŞİFRE DEĞİŞTİR</h2>
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="savePassword()" class="card-body">
+        <div class="form-field">
+          <label>Mevcut Şifre</label>
+          <input type="password" formControlName="currentPassword" placeholder="••••••••">
+        </div>
+
+        <div class="form-field">
+          <label>Yeni Şifre</label>
+          <input type="password" formControlName="newPassword" placeholder="En az 6 karakter">
+        </div>
+
+        <div class="form-field">
+          <label>Yeni Şifre (Tekrar)</label>
+          <input type="password" formControlName="newPasswordConfirm" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="pixel-btn-gold">Şifreyi Güncelle</button>
+      </form>
+    </div>
+
+    <!-- Oturum Bilgisi & Çıkış -->
+    <div class="settings-card pixel-panel session-card">
+      <div class="card-header">
+        <h2>🚪 OTURUM YÖNETİMİ & MASKOT SEÇİMİ</h2>
+      </div>
+
+      <div class="card-body">
+        <div class="user-info-row">
+          <div class="user-avatar-frame" [title]="currentAvatarInfo.name">
+            <img [src]="currentAvatarInfo.image" [alt]="currentAvatarInfo.name" class="user-avatar-mascot-img">
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ profileForm.controls.fullName.value }}</span>
+            <span class="user-email">{{ profileForm.controls.email.value }}</span>
+            <span class="user-avatar-badge">{{ currentAvatarInfo.icon }} {{ currentAvatarInfo.name }}</span>
+          </div>
+        </div>
+
+        <div class="avatar-picker-section">
+          <label class="picker-label">Profil Maskotunu Seç (Yana Kaydır ➔):</label>
+          <div class="avatar-scroll-container">
+            <button 
+              type="button" 
+              class="avatar-option-card" 
+              *ngFor="let avatar of mascotAvatars"
+              [class.selected]="avatar.id === currentAvatarId"
+              (click)="selectAvatar(avatar.id)"
+              [title]="avatar.name">
+              <img [src]="avatar.image" [alt]="avatar.name" class="avatar-img">
+              <span class="avatar-name">{{ avatar.icon }} {{ avatar.name }}</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-logout" (click)="logout()">Oturumu Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width Non-functional Bankruptcy Section -->
+  <div class="bankrupt-section pixel-panel">
+    <div class="bankrupt-header">
+      <h2>🚨 ACİL DURUM & İFLAS BÖLGESİ</h2>
+      <p class="bankrupt-subtitle">Ormanda tüm bütçe tükendiğinde basılabileceğin buton!</p>
+    </div>
+    <button type="button" class="btn-bankrupt-full" (click)="triggerBankrupt()">
+      🏴 İFLAS BAYRAĞINI ÇEK 💸
+    </button>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+<!-- Top Header Bar -->
+<header class="top-header-bar" *ngIf="isAuthenticated">
+  <div class="header-date pixel-box">
+    <span class="date-icon">📅</span>
+    <span class="date-text">{{ formattedDate }}</span>
+    <span class="day-text">{{ dayName }}</span>
+  </div>
+
+  <div class="header-banner pixel-sign">
+    <span class="leaf-left">🌿</span>
+    <span class="banner-title">HOŞ GELDİN!</span>
+    <span class="leaf-right">🌿</span>
+  </div>
+
+  <div class="header-right">
+    <div class="coin-widget pixel-box" title="Güncel Bakiye">
+      <span class="coin-icon">🪙</span>
+      <span class="coin-amount">{{ currentBalance | number:'1.0-2' }} ₺</span>
+      <button type="button" class="coin-add-btn" (click)="onAddIncomeClick()" title="Gelir / Bakiye Ekle">+</button>
+    </div>
+
+    <a routerLink="/settings" class="user-profile-widget pixel-box" title="Profil ve Ayarlar">
+      <div class="header-avatar-frame">
+        <img [src]="currentAvatarInfo.image" [alt]="currentAvatarInfo.name" class="header-avatar-img">
+      </div>
+      <span class="header-user-name">{{ userName || 'Orman Sakini' }}</span>
+    </a>
+
+    <button type="button" class="icon-btn pixel-btn logout-icon-btn" (click)="logout()" title="Çıkış Yap">
+      <span class="btn-icon">🚪</span>
+    </button>
+  </div>
+</header>
+
+<!-- Left Navigation Sidebar -->
+<aside class="sidebar">
+  <div class="brand pixel-panel">
+    <span class="brand-icon">🌲</span>
+    <div class="brand-text">
+      <span class="pixel-title">COZY FOREST</span>
+      <span class="brand-sub">FINANCE 🌿</span>
+    </div>
+  </div>
+
+  <nav class="links" *ngIf="isAuthenticated">
+    <a *ngFor="let link of links" [routerLink]="link.path" routerLinkActive="active" class="link-row">
+      <span class="link-icon">{{ link.icon }}</span>
+      <span class="link-label">{{ link.label }}</span>
+    </a>
+  </nav>
+
+  <!-- Left Sidebar Lower Section -->
+  <div class="sidebar-bottom" *ngIf="isAuthenticated">
+    <!-- Girl Campfire Mascot Bubble -->
+    <div class="mascot-speech-card pixel-panel">
+      <div class="speech-bubble">
+        <p>Tekrar hoş geldin! Bugün finansal hedeflerine bir adım daha yaklaşalım! 🔥</p>
+      </div>
+    </div>
+
+    <!-- GÜNLÜK TAVSİYELER (Daily Advice Card - Replaces Level System) -->
+    <section class="daily-advice-card pixel-panel">
+      <div class="advice-header">
+        <span class="advice-icon">💡</span>
+        <span class="advice-title">GÜNLÜK TAVSİYE</span>
+        <span class="advice-counter">({{ adviceIndex + 1 }}/{{ advices.length }})</span>
+      </div>
+      
+      <div class="advice-body">
+        <p class="advice-text">{{ guideAdvice }}</p>
+      </div>
+
+      <button type="button" class="advice-next-btn pixel-btn-gold" (click)="nextAdvice()">
+        <span>Sonraki Tavsiye</span>
+        <span class="btn-arrow">🔄</span>
+      </button>
+    </section>
+  </div>
+</aside>

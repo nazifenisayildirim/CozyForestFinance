@@ -1,0 +1,7 @@
+<div class="mascot-message">
+  <img class="mascot-image" [class.mascot-frog]="character === 'frog'" [src]="imageSrc" [alt]="character + ' - ' + mood">
+  <div class="bubble">
+    <p class="bubble-text">{{ message }}</p>
+    <p class="bubble-sub" *ngIf="subMessage">{{ subMessage }}</p>
+  </div>
+</div>

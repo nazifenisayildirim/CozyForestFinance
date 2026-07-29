@@ -1,0 +1,38 @@
+<section class="auth-page">
+  <form class="card auth-form pixel-panel" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Giriş Yap</h1>
+
+    <div class="form-field">
+      <label>E-posta</label>
+      <input type="email" formControlName="email" placeholder="ornek@eposta.com">
+      <p class="field-error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Geçerli bir e-posta adresi giriniz.
+      </p>
+    </div>
+
+    <div class="form-field">
+      <label>Şifre</label>
+      <div class="password-input-wrapper">
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••">
+        <button 
+          type="button" 
+          class="toggle-password-btn" 
+          (click)="toggleShowPassword()" 
+          [title]="showPassword ? 'Şifreyi Gizle' : 'Şifreyi Göster'">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+      <p class="field-error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+        Şifre zorunludur.
+      </p>
+    </div>
+
+    <p class="field-error" *ngIf="errorMessage">✕ {{ errorMessage }}</p>
+
+    <button type="submit" class="pixel-btn-gold" [disabled]="submitting">
+      {{ submitting ? 'Giriş yapılıyor…' : 'GİRİŞ YAP 🌲' }}
+    </button>
+
+    <p class="switch-link">Hesabın yok mu? <a routerLink="/register">Kayıt ol</a></p>
+  </form>
+</section>

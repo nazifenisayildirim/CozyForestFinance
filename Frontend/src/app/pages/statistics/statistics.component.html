@@ -1,0 +1,184 @@
+<section class="statistics-page">
+  <div class="header-row">
+    <div class="title-block">
+      <h1>İSTATİSTİKLER <span class="leaf-icon">🐸</span></h1>
+      <p class="subtitle">Aylık gelir-gider grafiklerini ve harcama analizlerini incele.</p>
+    </div>
+  </div>
+
+  <app-mascot-message character="frog" [mood]="frogMood" [message]="frogMessage"></app-mascot-message>
+
+  <div *ngIf="loading" class="loading">Yükleniyor…</div>
+
+  <ng-container *ngIf="summary && !loading">
+    <div class="card savings-card">
+      <div class="savings-item">
+        <span class="label">Bu Ay Tasarruf</span>
+        <span class="value" [class.negative]="summary.currentMonthSavings < 0">
+          {{ summary.currentMonthSavings | number:'1.2-2' }} ₺
+        </span>
+      </div>
+      <div class="savings-item">
+        <span class="label">Geçen Ay</span>
+        <span class="value" [class.negative]="summary.previousMonthSavings < 0">
+          {{ summary.previousMonthSavings | number:'1.2-2' }} ₺
+        </span>
+      </div>
+      <div class="savings-item" *ngIf="summary.topExpenseCategory">
+        <span class="label">En Yüksek Kategori</span>
+        <span class="value">{{ summary.topExpenseCategory }}</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Aylık Gelir - Gider (Son 6 Ay)</h2>
+      <div class="bar-chart">
+        <div class="bar-group" *ngFor="let m of summary.monthly">
+          <div class="bars">
+            <div class="bar income" [style.height.%]="barHeight(m.totalIncome)" [title]="m.totalIncome + ' ₺'"></div>
+            <div class="bar expense" [style.height.%]="barHeight(m.totalExpense)" [title]="m.totalExpense + ' ₺'"></div>
+          </div>
+          <span class="bar-label">{{ monthLabel(m.year, m.month) }}</span>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i class="dot income"></i> Gelir</span>
+        <span><i class="dot expense"></i> Gider</span>
+      </div>
+    </div>
+
+    <!-- 1. GENEL GELİR KATEGORİ DAĞILIMI -->
+    <div class="card income-theme-card">
+      <h2>GENEL GELİR KATEGORİ DAĞILIMI</h2>
+      <app-empty-state
+        *ngIf="generalIncomeBreakdown.length === 0"
+        character="frog"
+        mood="thinking"
+        message="Henüz yeterli genel gelir verisi yok.">
+      </app-empty-state>
+
+      <div class="category-list" *ngIf="generalIncomeBreakdown.length > 0">
+        <div class="category-row" *ngFor="let c of generalIncomeBreakdown">
+          <span class="cat-name">{{ c.categoryName }}</span>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill income-fill" [style.width.%]="c.percent"></div>
+          </div>
+          <span class="cat-percent">%{{ c.percent }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. GENEL GİDER KATEGORİ DAĞILIMI -->
+    <div class="card">
+      <h2>GENEL GİDER KATEGORİ DAĞILIMI</h2>
+      <app-empty-state
+        *ngIf="summary.categoryBreakdown.length === 0"
+        character="frog"
+        mood="thinking"
+        message="Henüz yeterli genel gider verisi yok.">
+      </app-empty-state>
+
+      <div class="category-list" *ngIf="summary.categoryBreakdown.length > 0">
+        <div class="category-row" *ngFor="let c of summary.categoryBreakdown">
+          <span class="cat-name">{{ c.categoryName }}</span>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill" [style.width.%]="c.percent"></div>
+          </div>
+          <span class="cat-percent">%{{ c.percent }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. AYLIK GELİR DAĞILIMI (Ay ve Yıl Dropdown Seçimi) -->
+    <div class="card period-card income-theme-card">
+      <h2>AYLIK GELİR DAĞILIMI</h2>
+      <p class="card-subtitle">Seçtiğin ay ve yıla ait gelir kategorileri dağılımı.</p>
+
+      <div class="date-filter-row">
+        <div class="filter-field">
+          <label>Ay:</label>
+          <select [(ngModel)]="selectedIncomeMonth" (change)="onIncomeFilterChange()">
+            <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label>Yıl:</label>
+          <select [(ngModel)]="selectedIncomeYear" (change)="onIncomeFilterChange()">
+            <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="period-total-box income-total-box" *ngIf="filteredIncomeCategoryBreakdown.length > 0">
+        <span class="total-label">Seçilen Ay Toplam Gelir:</span>
+        <span class="total-val income-val">{{ periodTotalIncome | number:'1.2-2' }} ₺</span>
+      </div>
+
+      <app-empty-state
+        *ngIf="filteredIncomeCategoryBreakdown.length === 0"
+        character="frog"
+        mood="thinking"
+        message="Seçilen ay ve yılda herhangi bir gelir kaydı bulunamadı.">
+      </app-empty-state>
+
+      <div class="category-list" *ngIf="filteredIncomeCategoryBreakdown.length > 0">
+        <div class="category-row period-cat-row" *ngFor="let c of filteredIncomeCategoryBreakdown">
+          <div class="cat-title-block">
+            <span class="cat-name">{{ c.categoryName }}</span>
+            <span class="cat-amount income-amount">{{ c.totalAmount | number:'1.2-2' }} ₺</span>
+          </div>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill income-fill" [style.width.%]="c.percent"></div>
+          </div>
+          <span class="cat-percent">%{{ c.percent }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. AYLIK GİDER DAĞILIMI (Ay ve Yıl Dropdown Seçimi) -->
+    <div class="card period-card">
+      <h2>AYLIK GİDER DAĞILIMI</h2>
+      <p class="card-subtitle">Seçtiğin ay ve yıla ait harcama kategorileri dağılımı.</p>
+
+      <div class="date-filter-row">
+        <div class="filter-field">
+          <label>Ay:</label>
+          <select [(ngModel)]="selectedExpenseMonth" (change)="onExpenseFilterChange()">
+            <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label>Yıl:</label>
+          <select [(ngModel)]="selectedExpenseYear" (change)="onExpenseFilterChange()">
+            <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="period-total-box" *ngIf="filteredCategoryBreakdown.length > 0">
+        <span class="total-label">Seçilen Ay Toplam Gider:</span>
+        <span class="total-val">{{ periodTotalExpense | number:'1.2-2' }} ₺</span>
+      </div>
+
+      <app-empty-state
+        *ngIf="filteredCategoryBreakdown.length === 0"
+        character="frog"
+        mood="thinking"
+        message="Seçilen ay ve yılda herhangi bir gider kaydı bulunamadı.">
+      </app-empty-state>
+
+      <div class="category-list" *ngIf="filteredCategoryBreakdown.length > 0">
+        <div class="category-row period-cat-row" *ngFor="let c of filteredCategoryBreakdown">
+          <div class="cat-title-block">
+            <span class="cat-name">{{ c.categoryName }}</span>
+            <span class="cat-amount">{{ c.totalAmount | number:'1.2-2' }} ₺</span>
+          </div>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill" [style.width.%]="c.percent"></div>
+          </div>
+          <span class="cat-percent">%{{ c.percent }}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</section>

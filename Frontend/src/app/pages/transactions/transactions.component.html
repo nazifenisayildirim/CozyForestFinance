@@ -1,0 +1,145 @@
+<section class="transactions-page">
+  <div class="header-row">
+    <div class="title-block">
+      <h1>İŞLEMLERİN <span class="leaf-icon">🦝</span></h1>
+      <p class="subtitle">Gelir ve gider kayıtlarını filtrele, düzenle ve yeni işlem ekle.</p>
+    </div>
+    <button type="button" class="pixel-btn-gold" (click)="openCreateForm()">+ YENİ İŞLEM EKLE</button>
+  </div>
+
+  <app-mascot-message character="raccoon" [mood]="raccoonMood" [message]="raccoonMessage"></app-mascot-message>
+
+  <form class="card filter-bar" [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+    <div class="filter-field">
+      <label>Başlangıç</label>
+      <input type="date" formControlName="startDate">
+    </div>
+    <div class="filter-field">
+      <label>Bitiş</label>
+      <input type="date" formControlName="endDate">
+    </div>
+    <div class="filter-field">
+      <label>Kategori</label>
+      <select formControlName="categoryId">
+        <option value="">Tümü</option>
+        <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label>Tür</label>
+      <select formControlName="type">
+        <option value="">Tümü</option>
+        <option value="Income">Gelir</option>
+        <option value="Expense">Gider</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">Filtrele</button>
+      <button type="button" class="btn btn-secondary" (click)="clearFilter()">Temizle</button>
+    </div>
+  </form>
+
+  <div *ngIf="loading" class="loading">Yükleniyor…</div>
+
+  <app-empty-state
+    *ngIf="!loading && transactions.length === 0"
+    character="raccoon"
+    [mood]="raccoonMood"
+    [message]="raccoonMessage">
+  </app-empty-state>
+
+  <div class="card table-card" *ngIf="!loading && transactions.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Tarih</th>
+          <th>Tür</th>
+          <th>Kategori</th>
+          <th>Açıklama</th>
+          <th>Tutar</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of transactions">
+          <td>{{ t.transactionDate | date:'dd.MM.yyyy' }}</td>
+          <td>
+            <span class="badge" [class.badge-income]="t.type === 'Income'" [class.badge-expense]="t.type === 'Expense'">
+              {{ t.type === 'Income' ? 'Gelir' : 'Gider' }}
+            </span>
+          </td>
+          <td>{{ t.categoryName }}</td>
+          <td>{{ t.description || '—' }}</td>
+          <td [class.badge-income]="t.type === 'Income'" [class.badge-expense]="t.type === 'Expense'">
+            {{ t.amount | number:'1.2-2' }} ₺
+          </td>
+          <td class="row-actions">
+            <button class="btn btn-secondary" (click)="openEditForm(t)">Düzenle</button>
+            <button class="btn btn-danger" (click)="askDelete(t.id)">Sil</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Yeni / Düzenleme formu -->
+<div class="overlay" *ngIf="showForm">
+  <div class="dialog card">
+    <h2>{{ editingId ? 'İşlemi Düzenle' : 'Yeni İşlem' }}</h2>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <div class="form-field">
+        <label>Tür</label>
+        <select formControlName="type">
+          <option value="Expense">Gider</option>
+          <option value="Income">Gelir</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label>Kategori</label>
+        <select formControlName="categoryId">
+          <option value="" disabled>Seçiniz</option>
+          <option *ngFor="let c of categoriesForSelectedType" [value]="c.id">{{ c.name }}</option>
+        </select>
+        <p class="field-error" *ngIf="form.controls.categoryId.touched && form.controls.categoryId.invalid">
+          Kategori seçilmeden kayıt yapılamaz.
+        </p>
+      </div>
+
+      <div class="form-field">
+        <label>Tutar</label>
+        <input type="number" step="0.01" min="0.01" formControlName="amount">
+        <p class="field-error" *ngIf="form.controls.amount.touched && form.controls.amount.invalid">
+          Tutar sıfırdan büyük olmalıdır.
+        </p>
+      </div>
+
+      <div class="form-field">
+        <label>Tarih</label>
+        <input type="date" formControlName="transactionDate">
+        <p class="field-error" *ngIf="form.controls.transactionDate.touched && form.controls.transactionDate.invalid">
+          Tarih boş bırakılamaz.
+        </p>
+      </div>
+
+      <div class="form-field">
+        <label>Açıklama (opsiyonel)</label>
+        <textarea rows="2" maxlength="300" formControlName="description"></textarea>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" (click)="closeForm()">Vazgeç</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [open]="confirmDeleteOpen"
+  title="İşlemi sil?"
+  message="Bu kayıt kalıcı olarak silinecek."
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()">
+</app-confirm-dialog>

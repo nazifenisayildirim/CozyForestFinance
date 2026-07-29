@@ -1,0 +1,136 @@
+:root {
+  --gold: #e0a93f;
+  --gold-dim: #8d5c27;
+  --cream: #f5e6c8;
+  --text-muted: #cbb891;
+  --income: #79c94f;
+  --expense: #ef6651;
+  --earth: #cbb891;
+  --font-pixel: 'Press Start 2P', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: #0c1410;
+  background-image:
+    linear-gradient(rgba(8, 14, 11, 0.72), rgba(6, 10, 8, 0.85)),
+    url('assets/bg-cozy-forest.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: var(--font-body);
+  color: var(--cream);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 3px, #fff 3px 4px),
+    repeating-linear-gradient(90deg, transparent 0 3px, #000 3px 4px);
+  mix-blend-mode: overlay;
+}
+
+img { image-rendering: pixelated; }
+
+h1, h2, h3 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--cream);
+  text-shadow: 2px 2px 0 #170e08;
+}
+h1 { font-size: 18px !important; }
+h2 { font-size: 13px !important; }
+h3 { font-size: 11px !important; }
+
+.pixel-title {
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: .5px;
+  color: #f3c968;
+  text-shadow: 2px 2px 0 #231307;
+}
+
+.btn {
+  border-radius: 1px;
+  padding: 10px 16px;
+  font-weight: 800;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: transform .08s ease, filter .08s ease;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.07), 3px 3px 0 rgba(0,0,0,.65);
+  &:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+  &:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.65); }
+  &:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+}
+.btn-primary { background: linear-gradient(#eeb64a, #bd7e24); color: #26170b; border: 2px solid #ffd46e; }
+.btn-secondary { background: linear-gradient(#382419, #21150e); color: var(--cream); border: 2px solid var(--gold-dim); }
+.btn-danger { background: linear-gradient(#d85d4d, #8e3029); color: white; border: 2px solid #f18a79; }
+
+.card {
+  position: relative;
+  background:
+    linear-gradient(rgba(55,36,23,.96), rgba(31,20,13,.96)),
+    repeating-linear-gradient(0deg, transparent 0 10px, rgba(255,255,255,.025) 10px 11px);
+  border: 3px solid #17100a;
+  outline: 2px solid var(--gold-dim);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px #4b301b, 5px 5px 0 rgba(0,0,0,.55);
+  padding: 20px;
+  color: var(--cream);
+}
+.card::before,
+.card::after {
+  content: '◆';
+  position: absolute;
+  color: #6f4a22;
+  font-size: 8px;
+}
+.card::before { top: 5px; left: 6px; }
+.card::after { right: 6px; bottom: 5px; }
+
+.badge { display: inline-block; padding: 4px 9px; border-radius: 1px; border: 1px solid currentColor; font-size: 12px; font-weight: 800; }
+.badge-income { background: rgba(79,209,122,.13); color: var(--income); }
+.badge-expense { background: rgba(236,107,86,.13); color: var(--expense); }
+
+input, select, textarea {
+  font-family: var(--font-body);
+  background: #1a100b;
+  border: 2px solid #8b5a26;
+  border-radius: 1px;
+  box-shadow: inset 2px 2px 0 #0e0906;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  color: var(--cream);
+  &:focus { outline: 2px solid #e2aa42; outline-offset: 1px; }
+  &::placeholder { color: #9f8c70; }
+}
+
+.field-error { color: #ff806a; font-size: 12px; margin-top: 4px; }
+
+table { width: 100%; border-collapse: collapse; background: rgba(10,6,4,.22); }
+thead th { text-align: left; font-size: 12px; color: #f1bd54; border-bottom: 3px double #8b5925; padding: 10px; }
+tbody td { padding: 11px 10px; border-bottom: 1px solid rgba(217,164,65,.18); font-size: 14px; color: var(--cream); }
+tbody tr:nth-child(even) { background: rgba(0,0,0,.17); }
+tbody tr:hover { background: rgba(111,145,45,.12); }
+
+.cat-bar-track {
+  border-radius: 0 !important;
+  border: 2px solid #100a06;
+  background: #15100c !important;
+  box-shadow: inset 1px 1px 0 #000;
+}
+
+::selection { background: #8e672d; color: #fff5df; }

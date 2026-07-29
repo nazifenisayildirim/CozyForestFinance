@@ -1,0 +1,49 @@
+.mascot-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mascot-image {
+  width: 84px;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
+  flex-shrink: 0;
+
+  &.mascot-frog {
+    width: 98px;
+  }
+}
+
+.bubble {
+  position: relative;
+  background: var(--cream);
+  border: 2px solid var(--earth);
+  border-radius: 10px;
+  padding: 10px 14px;
+  max-width: 320px;
+}
+
+.bubble-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a2c1e;
+  line-height: 1.3;
+}
+
+.bubble-sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--earth);
+}
+
+// Mobilde karakter üstte, balon altta (kılavuz 6.2).
+@media (max-width: 520px) {
+  .mascot-message {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bubble-text, .bubble-sub { font-size: 13px; }
+}

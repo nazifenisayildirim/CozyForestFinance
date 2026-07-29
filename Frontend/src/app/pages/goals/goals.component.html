@@ -1,0 +1,118 @@
+<section class="goals-page">
+  <div class="header-row">
+    <div class="title-block">
+      <h1>HEDEFLERİN <span class="leaf-icon">🐿️</span></h1>
+      <p class="subtitle">Tasarruf hedeflerini belirle, adım adım ilerlemeni takip et.</p>
+    </div>
+    <button class="pixel-btn-gold" (click)="openCreateForm()">+ YENİ HEDEF EKLE</button>
+  </div>
+
+  <app-mascot-message character="squirrel" [mood]="squirrelMood" [message]="squirrelMessage"></app-mascot-message>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button type="button" class="tab-btn" [class.active]="activeTab === 'all'" (click)="setTab('all')">Tüm Hedefler</button>
+    <button type="button" class="tab-btn" [class.active]="activeTab === 'active'" (click)="setTab('active')">Aktif</button>
+    <button type="button" class="tab-btn" [class.active]="activeTab === 'completed'" (click)="setTab('completed')">Tamamlanan</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">Yükleniyor…</div>
+
+  <app-empty-state
+    *ngIf="!loading && filteredGoals.length === 0"
+    character="squirrel"
+    mood="calm"
+    message="Henüz bu filtreye uygun hedef bulunmuyor. İlk tasarruf hedefini oluşturabilirsin!">
+  </app-empty-state>
+
+  <div class="goals-grid" *ngIf="!loading && filteredGoals.length > 0">
+    <div class="goal-card pixel-panel" *ngFor="let g of filteredGoals; let idx = index" [class.completed]="g.isCompleted">
+      <div class="card-header">
+        <div class="goal-icon-badge">
+          <span>{{ idx === 0 ? '🌰' : (idx === 1 ? '⭐' : '💎') }}</span>
+        </div>
+        <div class="goal-title-group">
+          <h3>{{ g.name }}</h3>
+          <span class="status-badge" [class.status-completed]="g.isCompleted">
+            {{ g.isCompleted ? '✓ TAMAMLANDI' : 'AKTİF' }}
+          </span>
+        </div>
+        <button type="button" class="delete-icon-btn" (click)="askDelete(g.id)" title="Hedefi Sil">🗑️</button>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-info">
+          <span class="amount-current">₺ {{ g.currentAmount | number:'1.0-0' }}</span>
+          <span class="amount-target">/ ₺ {{ g.targetAmount | number:'1.0-0' }}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" [style.width.%]="g.progressPercent"></div>
+        </div>
+        <div class="progress-bottom">
+          <span class="percent-label">%{{ g.progressPercent }} tamamlandı</span>
+          <span class="due-label" *ngIf="g.dueDate">Son Tarih: {{ g.dueDate | date:'dd.MM.yyyy' }}</span>
+        </div>
+      </div>
+
+      <!-- Deposit Action -->
+      <div class="deposit-box" *ngIf="!g.isCompleted">
+        <span class="deposit-label">Birikim Ekle (₺):</span>
+        <div class="deposit-controls">
+          <input
+            type="number"
+            step="50"
+            min="1"
+            [ngModel]="depositInputs.get(g.id)"
+            (ngModelChange)="depositInputs.set(g.id, $event)"
+            class="deposit-input">
+          <button type="button" class="deposit-btn" (click)="addDeposit(g)">Ekle +</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Create Goal Dialog Modal -->
+<div class="overlay-backdrop" *ngIf="showForm">
+  <div class="modal-card pixel-panel">
+    <div class="modal-header">
+      <h2>YENİ HEDEF EKLE 🐿️</h2>
+      <button type="button" class="close-btn" (click)="closeForm()">✕</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="modal-body">
+      <div class="form-field">
+        <label>Hedef Adı</label>
+        <input type="text" formControlName="name" placeholder="Örn. Yeni Bilgisayar, Yaz Tatili">
+      </div>
+
+      <div class="form-field">
+        <label>Hedef Tutar (₺)</label>
+        <input type="number" step="100" min="1" formControlName="targetAmount" placeholder="Örn. 12000">
+      </div>
+
+      <div class="form-field">
+        <label>Mevcut Birikim (₺)</label>
+        <input type="number" step="100" min="0" formControlName="currentAmount" placeholder="Örn. 1000">
+      </div>
+
+      <div class="form-field">
+        <label>Son Tarih (Opsiyonel)</label>
+        <input type="date" formControlName="dueDate">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeForm()">Vazgeç</button>
+        <button type="submit" class="pixel-btn-gold" [disabled]="form.invalid">Oluştur</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [open]="confirmDeleteOpen"
+  title="Hedefi Sil?"
+  message="Bu hedef kalıcı olarak silinecek."
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()">
+</app-confirm-dialog>

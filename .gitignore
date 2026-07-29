@@ -1,0 +1,15 @@
+# Backend
+bin/
+obj/
+*.user
+appsettings.Development.json
+
+# Frontend
+node_modules/
+dist/
+.angular/
+
+# OS / IDE
+.vs/
+.vscode/
+.DS_Store

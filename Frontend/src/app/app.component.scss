@@ -1,0 +1,25 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: transparent;
+}
+.page-container {
+  flex: 1;
+  margin-left: 270px;
+  padding-top: 80px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 40px;
+  max-width: 1440px;
+  width: calc(100% - 270px);
+}
+
+@media (max-width: 960px) {
+  .page-container {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 74px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

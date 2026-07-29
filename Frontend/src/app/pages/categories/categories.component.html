@@ -1,0 +1,92 @@
+<section class="categories-page">
+  <div class="header-row">
+    <div class="title-block">
+      <h1>KATEGORİ YÖNETİMİ <span class="leaf-icon">🌳</span></h1>
+      <p class="subtitle">Gelir ve gider kategorilerini tanımla, düzenle ve yönet.</p>
+    </div>
+  </div>
+
+  <app-mascot-message character="frog" [mood]="frogMood" [message]="frogMessage"></app-mascot-message>
+
+  <!-- Category Create Card -->
+  <div class="create-card pixel-panel">
+    <div class="card-header">
+      <h2>YENİ KATEGORİ EKLE 🌿</h2>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="card-body">
+      <div class="form-row">
+        <div class="form-field flex-2">
+          <label>Kategori Adı</label>
+          <input type="text" formControlName="name" placeholder="Örn. Market, Fatura, Maaş, Kira">
+        </div>
+
+        <div class="form-field flex-1">
+          <label>Tür</label>
+          <select formControlName="type">
+            <option value="Expense">Gider</option>
+            <option value="Income">Gelir</option>
+          </select>
+        </div>
+
+        <button type="submit" class="pixel-btn-gold submit-btn">
+          + KATEGORİ EKLE
+        </button>
+      </div>
+
+      <p class="feedback-msg" *ngIf="feedbackMessage">✓ {{ feedbackMessage }}</p>
+      <p class="field-error" *ngIf="errorMessage">✕ {{ errorMessage }}</p>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">Yükleniyor…</div>
+
+  <app-empty-state
+    *ngIf="!loading && categories.length === 0"
+    character="frog"
+    mood="thinking"
+    message="Henüz kategori tanımlanmadı. Yukarıdaki formdan ilk kategorini ekleyebilirsin.">
+  </app-empty-state>
+
+  <!-- Categories Table Card -->
+  <div class="table-card pixel-panel" *ngIf="!loading && categories.length > 0">
+    <div class="card-header">
+      <h2>MEVCUT KATEGORİLER ({{ categories.length }})</h2>
+    </div>
+
+    <table class="pixel-table">
+      <thead>
+        <tr>
+          <th>KATEGORİ ADI</th>
+          <th>TÜR</th>
+          <th>DURUM</th>
+          <th class="text-right">İŞLEMLER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of categories">
+          <td class="cat-name-cell">
+            <span class="cat-icon-bullet">{{ c.type === 'Income' ? '💼' : '📦' }}</span>
+            <span class="cat-title">{{ c.name }}</span>
+          </td>
+          <td>
+            <span class="cat-tag" [class.cat-income]="c.type === 'Income'" [class.cat-expense]="c.type === 'Expense'">
+              {{ c.type === 'Income' ? 'Gelir' : 'Gider' }}
+            </span>
+          </td>
+          <td>
+            <span class="status-pill" [class.status-active]="c.isActive">
+              {{ c.isActive ? 'AKTİF' : 'PASİF' }}
+            </span>
+          </td>
+          <td class="row-actions text-right">
+            <button type="button" class="btn-action-sec" (click)="toggleActive(c)">
+              {{ c.isActive ? 'Pasife Al' : 'Aktif Et' }}
+            </button>
+            <button type="button" class="btn-action-danger" (click)="remove(c)">Sil</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
